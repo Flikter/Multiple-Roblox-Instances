@@ -1,6 +1,4 @@
-#ifndef LOGGER_H
-#define LOGGER_H
-
+#pragma once
 #include <iostream>
 #include <string>
 
@@ -24,5 +22,3 @@ private:
 	Logger();
 	void updateColor(LogLevel level);
 };
-
-#endif // LOGGER_H
