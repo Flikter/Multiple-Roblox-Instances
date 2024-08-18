@@ -2,21 +2,23 @@
 #include <iostream>
 #include <string>
 
-enum class LogLevel {
+enum class LogLevel
+{
 	Info,
 	Success,
 	Warning,
 	Error,
 };
 
-class Logger {
-	public:
-		Logger(const Logger&) = delete;
-		Logger& operator=(const Logger&) = delete;
-		static Logger& getInstance();
-		void log(LogLevel level, std::string output);
-		void logFailure();
-	private:
-		Logger();
-		void updateColor(LogLevel level);
+class Logger
+{
+public:
+	Logger(const Logger&) = delete;
+	Logger& operator=(const Logger&) = delete;
+	static Logger& getInstance();
+	void log(LogLevel level, std::string output);
+	void logFailure();
+private:
+	Logger();
+	void updateColor(LogLevel level);
 };
