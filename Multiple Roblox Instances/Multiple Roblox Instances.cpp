@@ -3,7 +3,7 @@
 #include "logger.h"
 
 const std::wstring programName = L"Multiple Roblox Instances";
-const std::wstring mutexName = L"ROBLOX_singletonMutex";
+const std::wstring robloxMutexName = L"ROBLOX_singletonMutex";
 Logger& logger = Logger::getInstance();
 
 void minimizeWindow()
@@ -21,16 +21,24 @@ void minimizeWindow()
 int main()
 {
 	SetConsoleTitle(programName.c_str());
+
+	HANDLE programMutex = CreateMutexW(NULL, true, programName.c_str());
+
+	if (GetLastError() == ERROR_ALREADY_EXISTS)
+	{
+		return -1;
+	}
+
 	logger.log(LogLevel::Info, "Starting...");
 
-	HANDLE existingMutex = OpenMutexW(SYNCHRONIZE, false, mutexName.c_str());
+	HANDLE existingRobloxMutex = OpenMutexW(SYNCHRONIZE, false, robloxMutexName.c_str());
 
-	if (existingMutex)
+	if (existingRobloxMutex)
 	{
 		logger.log(LogLevel::Warning, "Roblox is open, it must be closed.");
 		logger.log(LogLevel::Warning, "Waiting for Roblox to be closed...");
 
-		DWORD result = WaitForSingleObject(existingMutex, INFINITE);
+		DWORD result = WaitForSingleObject(existingRobloxMutex, INFINITE);
 
 		if (result != WAIT_OBJECT_0 && result != WAIT_ABANDONED)
 		{
@@ -40,9 +48,9 @@ int main()
 	}
 	else
 	{
-		HANDLE newMutex = CreateMutexW(NULL, true, mutexName.c_str());
+		HANDLE newRobloxMutex = CreateMutexW(NULL, true, robloxMutexName.c_str());
 
-		if (!newMutex)
+		if (!newRobloxMutex)
 		{
 			logger.logFailure();
 			return -1;
