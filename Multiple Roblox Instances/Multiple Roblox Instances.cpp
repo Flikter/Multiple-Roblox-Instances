@@ -6,6 +6,18 @@ const std::wstring programName = L"Multiple Roblox Instances";
 const std::wstring mutexName = L"ROBLOX_singletonMutex";
 Logger& logger = Logger::getInstance();
 
+void minimizeWindow()
+{
+	HWND window = GetConsoleWindow();
+
+	while (!IsWindowVisible(window))
+	{
+		Sleep(0);
+	}
+
+	ShowWindow(window, SW_MINIMIZE);
+}
+
 int main()
 {
 	SetConsoleTitle(programName.c_str());
@@ -37,6 +49,7 @@ int main()
 		}
 	}
 
+	minimizeWindow();
 	logger.log(LogLevel::Success, "Started.");
 	logger.log(LogLevel::Warning, "Closing this window will close all but the Roblox instance which was launched first.");
 	std::cin.get();
